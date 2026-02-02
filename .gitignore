@@ -1,0 +1,2 @@
+playbooks/roles
+!playbooks/roles/gitlab-runner

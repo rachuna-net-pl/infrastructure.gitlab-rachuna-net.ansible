@@ -1,0 +1,5 @@
+---
+ansible_host: "ct01003.{{ inv_all_root_root_domain }}"
+fqdn: "ct01003.{{ inv_all_root_root_domain }}"
+ansible_user: "{{ lookup('env', 'ANSIBLE_USER') }}"
+ansible_become_pass: "{{ lookup('env', 'ANSIBLE_PASSWORD') }}"
