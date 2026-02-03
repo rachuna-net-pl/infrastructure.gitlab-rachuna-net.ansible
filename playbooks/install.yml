@@ -1,0 +1,48 @@
+---
+- name: Gitlab Hardening Machine
+  hosts: ['gitlab_runner']
+  become: true
+  gather_facts: true
+  vars:
+    ansible_python_interpreter: /usr/bin/python3.12
+
+  roles:
+    - role: set-timezone
+      vars:
+        input_timezone: "{{ inv_all_timezone }}"
+        input_locale: "{{ inv_all_locale }}"
+        input_language: "{{ inv_all_language }}"
+        input_lc_all: "{{ inv_all_lc_all }}"
+
+    - role: users-management
+      vars:
+        in_groups: "{{ inv_all_groups }}"
+        in_user_accounts: "{{ inv_all_user_accounts }}"
+        in_technical_accounts: "{{ inv_all_technical_accounts }}"
+
+    - role: sudo
+      vars:
+        in_custom_groups: "{{ inv_all_sudo_groups }}"
+
+    - role: set-hostname
+      vars:
+        in_hostname_fqdn: "{{ fqdn }}"
+        in_disable_reboot: true
+      when:
+        - in_disable_set_hostname == false
+
+    - role: ssh-hardening
+      vars:
+        in_sshd_config: "{{ inv_sshd_config }}"
+
+    - role: install-packages
+      vars:
+        in_ubuntu_repositories: "{{ inv_group_repositories | default([]) }}"
+        in_packages_to_install: "{{ inv_group_packages | default([]) }}"
+        in_packages_to_remove: "{{ inv_group_remove_packages | default([]) }}"
+
+    - role: gitlab-runner
+      vars:
+        in_debug: true
+        in_gitlab_runner_configuration: "{{ inv_host_gitlab_runner_configuration }}"
+        in_gitlab_runner_cache_nfs: "{{ inv_gitlab_runner_cache_nfs }}"

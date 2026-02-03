@@ -1,0 +1,7 @@
+---
+inv_gitlab_runner_cache_nfs:
+  enabled: true
+  src: "storage.rachuna-net.pl:/volume1/GITLAB_RUNNER_CACHE"
+  path: "/cache"
+  fstype: "nfs"
+  opts: "rw,sync"
